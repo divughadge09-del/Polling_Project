@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Create Poll</title>
+
+<style>
+body {
+    background:#6f6bc7;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.box {
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    width:350px;
+}
+input {
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+button {
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:25px;
+    background:#ffcaa6;
+    font-size:16px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+<div class="box">
+    <h2>Create New Poll</h2>
+
+    <input id="question" placeholder="What is your fav language">
+    <input id="opt1" placeholder="HTML">
+    <input id="opt2" placeholder="CSS">
+    <input id="opt3" placeholder="JavaScript">
+    <input id="opt4" placeholder="Python">
+
+    <button onclick="publishPoll()">Publish Poll</button>
+</div>
+
+<script>
+function publishPoll() {
+    const question = document.getElementById("question").value;
+    const options = [
+        opt1.value, opt2.value, opt3.value, opt4.value
+    ];
+
+    if (!question || options.some(o => o === "")) {
+        alert("Fill all fields");
+        return;
+    }
+
+    const pollData = {
+        question,
+        options,
+        votes: [0,0,0,0]
+    };
+
+    localStorage.setItem("pollData", JSON.stringify(pollData));
+
+    // 🔥 MOVE TO USER PAGE
+    window.location.href = "index.html";
+}
+</script>
+</body>
+</html>

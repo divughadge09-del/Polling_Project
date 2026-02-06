@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Poll</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: #6f6bc7;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 350px;
+    text-align: center;
+}
+
+.option {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #ffcaa6;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <button type="button" onclick="submitVote()">Submit Vote</button>
+</div>
+
+<script>
+// Get poll data from localStorage
+let pollData = JSON.parse(localStorage.getItem("pollData"));
+
+// If pollData not found, create a default poll
+if (!pollData) {
+    pollData = {
+        question: "What is your favorite language?",
+        options: ["HTML", "CSS", "JavaScript", "Python"],
+        votes: [0, 0, 0, 0]
+    };
+    localStorage.setItem("pollData", JSON.stringify(pollData));
+}
+
+// Display question
+document.getElementById("question").innerText = pollData.question;
+
+// Display options
+const optionsDiv = document.getElementById("options");
+pollData.options.forEach((opt, index) => {
+    optionsDiv.innerHTML += `
+        <div class="option">
+            <input type="radio" name="poll" value="${index}"> ${opt}
+        </div>
+    `;
+});
+
+// Submit vote and show results
+function submitVote() {
+    const selected = document.querySelector('input[name="poll"]:checked');
+    if (!selected) {
+        alert("Select an option");
+        return;
+    }
+
+    // Increment the vote
+    pollData.votes[selected.value]++;
+    localStorage.setItem("pollData", JSON.stringify(pollData));
+
+    // Calculate total votes
+    const totalVotes = pollData.votes.reduce((a, b) => a + b, 0);
+
+    // Show results in percentages
+    optionsDiv.innerHTML = "";
+    pollData.options.forEach((opt, index) => {
+        const percent = ((pollData.votes[index] / totalVotes) * 100).toFixed(1);
+        optionsDiv.innerHTML += `
+            <div class="option">
+                ${opt}: <strong>${pollData.votes[index]} vote(s)</strong> (${percent}%)
+            </div>
+        `;
+    });
+
+    // Hide submit button
+    document.querySelector("button").style.display = "none";
+}
+</script>
+</body>
+</html>
